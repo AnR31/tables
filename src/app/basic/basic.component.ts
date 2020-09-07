@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { LESSONS } from 'src/db-data';
 import { GRADES } from 'src/db-data';
 
@@ -13,35 +7,32 @@ import { GRADES } from 'src/db-data';
   templateUrl: './basic.component.html',
   styles: [],
 })
-export class BasicComponent implements AfterViewInit {
+export class BasicComponent {
   LESSONS;
   GRADES;
+  obj;
+
+  @ViewChild('nmbr') nmbr;
+  @ViewChild('dt') dt;
+  @ViewChild('tpc') tpc;
+  @ViewChild('hmwrk') hmwrk;
+  @ViewChild('nt') nt;
+
   constructor() {
     this.LESSONS = LESSONS;
+    localStorage.setItem('lessons', JSON.stringify(this.LESSONS));
     this.GRADES = GRADES;
   }
 
-  @ViewChild('nmbr')
-  nmbr: ElementRef;
-
-  @ViewChild('dt')
-  dt: ElementRef;
-
-  @ViewChild('tpc')
-  tpc: ElementRef;
-
-  @ViewChild('hmwrk')
-  hmwrk: ElementRef;
-
-  @ViewChild('nt')
-  nt: ElementRef;
-
   onClick($event) {
-    console.log(this.nt.nativeElement.value);
-    this.LESSONS.push('this.nmbr', 'this.dt', 'this.tpc', 'this.hmwrk', 'this.nt')
-  }
-
-  ngAfterViewInit() {
-    //console.log(this.nt.nativeElement);
+    this.obj = {
+      id: this.nmbr.nativeElement.value,
+      date: this.dt.nativeElement.value,
+      topic: this.tpc.nativeElement.value,
+      homework: this.hmwrk.nativeElement.value,
+      note: this.nt.nativeElement.value,
+    };
+    LESSONS.push(this.obj);
+    localStorage.setItem('lessons', JSON.stringify(this.LESSONS));
   }
 }
