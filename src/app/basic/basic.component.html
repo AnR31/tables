@@ -51,10 +51,27 @@
                         <option>3</option>
                         <option>4</option>
                         <option>5</option>
-                      </select>
+                    </select>
                 </td>
             </ng-container>
-
         </tr>
     </ng-container>
+    <tr>
+
+        <td><input placeholder="Имя" #name></td>
+        <td>-</td>
+        <td>-</td>
+        <td *ngFor="let lesson of LESSONS">
+            <select (change)="onClickSelect($event)" #mySel>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </td>
+        <td><button (click)="onClickAddStudent($event)">Добавить ученика</button></td>
+
+    </tr>
+
 </table>

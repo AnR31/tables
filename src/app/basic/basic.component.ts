@@ -65,6 +65,7 @@ export class BasicComponent {
   @ViewChild('hmwrk') hmwrk;
   @ViewChild('nt') nt;
   @ViewChild('mySel') mySel;
+  @ViewChild('name') name;
 
   constructor() {
     this.LESSONS = LESSONS;
@@ -92,6 +93,16 @@ export class BasicComponent {
   onClickSelect(event, name, score) {
     console.log(this.mySel.nativeElement.options.selectedIndex + " " + name + " " + score)
     
+  }
+
+  onClickAddStudent(event) {
+
+    GRADES.push({
+      name: this.name.nativeElement.value,
+      mid_grade: 4.5,
+      rounded_mid_grade: 4,
+      grades: [ {lesson: 1, score: 99}, {lesson: 2, score: 99}, {lesson: 3, score: 99} ],
+    });
   }
 //toElement.options.selectedIndex
 }

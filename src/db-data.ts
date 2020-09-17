@@ -1,25 +1,25 @@
 export const LESSONS: any = [
-  // {
-  //   id: 1,
-  //   date: '14.09.2020',
-  //   topic: 'Angular Core Deep Dive',
-  //   homework: 'Сделать расписание как в google',
-  //   note: 'Что может быть проще',
-  // },
-  // {
-  //   id: 2,
-  //   date: '15.09.2020',
-  //   topic: 'Angular super core',
-  //   homework: 'Сделать почту как в google',
-  //   note: 'Дайте пару дней',
-  // },
-  // {
-  //   id: 3,
-  //   date: '16.09.2020',
-  //   topic: 'Angular mega core',
-  //   homework: 'Сделать поиск как в google',
-  //   note: 'Наверняка все получится',
-  // },
+  {
+    id: 1,
+    date: '14.09.2020',
+    topic: 'Angular Core Deep Dive',
+    homework: 'Сделать расписание как в google',
+    note: 'Что может быть проще',
+  },
+  {
+    id: 2,
+    date: '15.09.2020',
+    topic: 'Angular super core',
+    homework: 'Сделать почту как в google',
+    note: 'Дайте пару дней',
+  },
+  {
+    id: 3,
+    date: '16.09.2020',
+    topic: 'Angular mega core',
+    homework: 'Сделать поиск как в google',
+    note: 'Наверняка все получится',
+  },
 ];
 
 export function findCourseById(lessonId: number) {
