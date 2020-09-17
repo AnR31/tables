@@ -5,7 +5,54 @@ import { GRADES } from 'src/db-data';
 @Component({
   selector: 'app-basic',
   templateUrl: './basic.component.html',
-  styles: [],
+  styles: [
+    `
+      table {
+        border-spacing: 0;
+        empty-cells: hide;
+      }
+      td {
+        padding: 10px 20px;
+        text-align: center;
+        border-bottom: 1px solid #f4eee8;
+        transition: all 0.5s linear;
+      }
+      td:first-child {
+        text-align: left;
+        color: #3d3511;
+        font-weight: bold;
+      }
+      th {
+        padding: 10px 20px;
+        color: #3d3511;
+        border-bottom: 1px solid #f4eee8;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+      td:nth-child(even) {
+        background: #f6d27e;
+      }
+      td:nth-child(odd) {
+        background: #d1c7bf;
+      }
+      th:nth-child(even) {
+        background: #f6d27e;
+      }
+      th:nth-child(odd) {
+        background: #d1c7bf;
+      }
+      .round-top {
+        border-top-left-radius: 5px;
+      }
+      .round-bottom {
+        border-bottom-left-radius: 5px;
+      }
+      tr:hover td {
+        background: #d1c7bf;
+        font-weight: bold;
+      }
+    `,
+  ],
 })
 export class BasicComponent {
   LESSONS;
@@ -17,6 +64,7 @@ export class BasicComponent {
   @ViewChild('tpc') tpc;
   @ViewChild('hmwrk') hmwrk;
   @ViewChild('nt') nt;
+  @ViewChild('mySel') mySel;
 
   constructor() {
     this.LESSONS = LESSONS;
@@ -33,6 +81,17 @@ export class BasicComponent {
       note: this.nt.nativeElement.value,
     };
     LESSONS.push(this.obj);
+    GRADES.push({
+      name: 'Newman',
+      mid_grade: 4.5,
+      rounded_mid_grade: 4,
+      grades: [ {lesson: 1, score: 99}, {lesson: 2, score: 99}, {lesson: 3, score: 99}, {lesson: 4, score: 99} ],
+    });
     localStorage.setItem('lessons', JSON.stringify(this.LESSONS));
   }
+  onClickSelect(event, name, score) {
+    console.log(this.mySel.nativeElement.options.selectedIndex + " " + name + " " + score)
+    
+  }
+//toElement.options.selectedIndex
 }

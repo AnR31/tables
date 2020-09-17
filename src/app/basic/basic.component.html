@@ -1,6 +1,5 @@
-<h1>Не показывать генеральному директору!</h1>
 <h3>Таблица уроков</h3>
-<table border="1">
+<table>
     <tr>
         <th>Номер</th>
         <th>Дата</th>
@@ -19,19 +18,18 @@
     </ng-container>
 </table>
 
-
-    <br>
+<div style="margin: 1% 0% 3% 0%;">
     <input type="text" placeholder="Номер" #nmbr>
     <input type="text" placeholder="Дата" #dt>
     <input type="text" placeholder="Тема" #tpc>
     <input type="text" placeholder="Задание" #hmwrk>
     <input type="text" placeholder="Примечание" #nt>
     <button (click)="onClick($event)">Добавить урок</button>
-
+</div>
 
 
 <h3>Таблица оценок</h3>
-<table border="1">
+<table border="1" style="text-align: center">
     <tr>
         <th>ФИО</th>
         <th>Средний балл</th>
@@ -46,7 +44,15 @@
             <td>{{grade.mid_grade}}</td>
             <td>{{grade.rounded_mid_grade}}</td>
             <ng-container *ngFor="let grd of grade.grades">
-                <td>{{grd}}</td>
+                <td>
+                    <select (change)="onClickSelect($event, grd.lesson, grd.score)" #mySel>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
+                </td>
             </ng-container>
 
         </tr>
