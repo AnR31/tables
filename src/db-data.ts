@@ -1,8 +1,11 @@
-export const LESSONS: any = [
+
+
+
+export class LESSONS: any[] = [
   {
     id: 1,
-    date: '14.09.2020',
     topic: 'Angular Core Deep Dive',
+    date: '14.09.2020',
     homework: 'Сделать расписание как в google',
     note: 'Что может быть проще',
   },
@@ -27,22 +30,25 @@ export function findCourseById(lessonId: number) {
 }
 
 export const GRADES: any = [
-  // {
-  //   name: 'Ivanov',
-  //   mid_grade: 5.5,
-  //   rounded_mid_grade: 5,
-  //   grades: [ {lesson: 1, score: 7}, {lesson: 2, score: 8}, {lesson: 3, score: 9} ],
-  // },
-  // {
-  //   name: 'Petrov',
-  //   mid_grade: 4.5,
-  //   rounded_mid_grade: 4,
-  //   grades: [ {lesson: 1, score: 10}, {lesson: 2, score: 11}, {lesson: 3, score: 12} ],
-  // },
-  // {
-  //   name: 'Sidorov',
-  //   mid_grade: 3.5,
-  //   rounded_mid_grade: 3,
-  //   grades: [ {lesson: 1, score: 13}, {lesson: 2, score: 14}, {lesson: 3, score: 15} ],
-  // },
+  {
+    id: 1,
+    name: 'Ivanov',
+    mid_grade: 5.5,
+    rounded_mid_grade: 5,
+    grades: [ {lesson: 1, score: 7}, {lesson: 2, score: 8}, {lesson: 3, score: 9} ],
+  },
+  {
+    id: 2,
+    name: 'Petrov',
+    mid_grade: 4.5,
+    rounded_mid_grade: 4,
+    grades: [ {lesson: 1, score: 10}, {lesson: 2, score: 11}, {lesson: 3, score: 12} ],
+  },
+  {
+    id: 3,
+    name: 'Sidorov',
+    mid_grade: 3.5,
+    rounded_mid_grade: 3,
+    grades: [ {lesson: 1, score: 13}, {lesson: 2, score: 14}, {lesson: 3, score: 15} ],
+  },
 ];
