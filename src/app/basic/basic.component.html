@@ -1,5 +1,5 @@
 <div class="table-container">
-<h3 class="header">Уроки:</h3>
+    <h3 class="header">Уроки:</h3>
 </div>
 <div class="table-container">
     <table>
@@ -24,12 +24,14 @@
 
 <div class="table-container">
     <div style="margin: 1% 0% 3% 0%;">
-        <input class="rounded-input" type="text" placeholder="Номер" #nmbr>
-        <input class="rounded-input" type="text" placeholder="Дата" #dt>
-        <input class="rounded-input" type="text" placeholder="Тема" #tpc>
-        <input class="rounded-input" type="text" placeholder="Задание" #hmwrk>
-        <input class="rounded-input" type="text" placeholder="Примечание" #nt>
-        <button class="rounded-input" (click)="onClickAddLesson()">Добавить урок</button>
+        <form [formGroup]="addLessonForm" novalidate>
+            <input formControlName="lessonNumber" class="rounded-input" type="text" placeholder="Номер">
+            <input formControlName="lessonDate" class="rounded-input" type="text" placeholder="Дата">
+            <input formControlName="lessonTopic" class="rounded-input" type="text" placeholder="Тема">
+            <input formControlName="lessonHomework" class="rounded-input" type="text" placeholder="Задание">
+            <input formControlName="lessonNote" class="rounded-input" type="text" placeholder="Примечание">
+            <button class="rounded-input" (click)="onClickAddLesson()">Добавить урок</button>
+        </form>
     </div>
 </div>
 
@@ -64,7 +66,9 @@
 </div>
 <div class="table-container">
     <div style="margin: 1% 0% 3% 0%;">
-        <input class="rounded-input" type="text" placeholder="Имя" #studentName>
-        <button class="rounded-input" (click)="onClickAddStudent()">Добавить студнета</button>
+        <form [formGroup]="addStudentForm" novalidate>
+            <input formControlName="studentName" class="rounded-input" type="text" placeholder="Имя">
+            <button class="rounded-input" (click)="onClickAddStudent()">Добавить студнета</button>
+        </form>
     </div>
 </div>

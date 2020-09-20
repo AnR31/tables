@@ -1,15 +1,21 @@
-import { Component, DoCheck, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+
 import { Lesson } from '../model/lesson';
 import { Student } from '../model/student';
 import { LessonScore } from '../model/lessonScore';
-import { LessonService } from './lesson.service';
+import { SelectService } from '../service/select.service';
+import { GetAvgService } from '../service/get-avg.service';
+import { GetIndexService } from '../service/get-index.service';
+import { GetScoreService } from '../service/get-score.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-basic',
   templateUrl: './basic.component.html',
   styleUrls: ['basicStyle.css'],
 })
-export class BasicComponent implements DoCheck {
+export class BasicComponent {
+
   Lessons: Lesson[] = JSON.parse(localStorage.getItem('lessons'));
   Students: Student[] = JSON.parse(localStorage.getItem('students'));
   LessonScores: LessonScore[] = JSON.parse(
@@ -18,19 +24,21 @@ export class BasicComponent implements DoCheck {
 
   studentId: number = 0;
   lessonId: number = 0;
-
   selIndex: number = 0;
-
-  @ViewChild('nmbr') nmbr;
-  @ViewChild('dt') dt;
-  @ViewChild('tpc') tpc;
-  @ViewChild('hmwrk') hmwrk;
-  @ViewChild('nt') nt;
-  @ViewChild('name') name;
 
   @ViewChild('studentName') studentName;
 
-  constructor(private serv: LessonService) {
+  addLessonForm: FormGroup;
+
+  addStudentForm: FormGroup;
+
+  constructor(
+    private selectService: SelectService,
+    private getAvgService: GetAvgService,
+    private getIndexService: GetIndexService,
+    private getScoreService: GetScoreService
+  ) {
+    this._createForm();
     if (this.LessonScores == null) {
       this.LessonScores = [];
     }
@@ -41,123 +49,57 @@ export class BasicComponent implements DoCheck {
       this.Lessons = [];
     }
   }
-  ngDoCheck(): void {
-    localStorage.setItem('lessons', JSON.stringify(this.Lessons));
-    localStorage.setItem('students', JSON.stringify(this.Students));
-    localStorage.setItem('lessonScores', JSON.stringify(this.LessonScores));
+
+  private _createForm() {
+    this.addLessonForm = new FormGroup({
+      lessonNumber: new FormControl(null),
+      lessonDate: new FormControl(null),
+      lessonTopic: new FormControl(null),
+      lessonHomework: new FormControl(null),
+      lessonNote: new FormControl(null),
+    }),
+    this.addStudentForm = new FormGroup({
+      studentName: new FormControl(null),
+    })
   }
 
   onClickAddLesson() {
     this.Lessons.push({
       id: this.lessonId++,
-      number: this.nmbr.nativeElement.value,
-      date: this.dt.nativeElement.value,
-      topic: this.tpc.nativeElement.value,
-      homework: this.hmwrk.nativeElement.value,
-      note: this.nt.nativeElement.value,
+      number: this.addLessonForm.get('lessonNumber').value,
+      date: this.addLessonForm.get('lessonDate').value,
+      topic: this.addLessonForm.get('lessonTopic').value,
+      homework: this.addLessonForm.get('lessonHomework').value,
+      note: this.addLessonForm.get('lessonNote').value,
     });
+    localStorage.setItem('lessons', JSON.stringify(this.Lessons));
   }
 
   onClickAddStudent() {
     this.Students.push({
       id: this.studentId++,
-      name: this.studentName.nativeElement.value,
+      name: this.addStudentForm.get('studentName').value,
     });
+    localStorage.setItem('students', JSON.stringify(this.Students));
   }
 
-  // проверяем пустой ли список, если да - пушим,
-  // если нет проверяем есть ли объект с таким студентИд и лессонИд, если да - присваиваем значение оценки, если нет - пушим
   onClickSelect(event, studentId, lessonId) {
-    if (this.LessonScores.length == 0) {
-      this.LessonScores.push({
-        studentId: studentId,
-        lessonId: lessonId,
-        score: event.srcElement.options.selectedIndex,
-      });
-      localStorage.setItem('lessonScores', JSON.stringify(this.LessonScores));
-    } else {
-      let isFound = false;
-      this.LessonScores.forEach((lessonScore) => {
-        if (
-          lessonId == lessonScore.lessonId &&
-          studentId == lessonScore.studentId
-        ) {
-          lessonScore.score = event.srcElement.options.selectedIndex;
-          isFound = true;
-        }
-      });
-      if (!isFound) {
-        this.LessonScores.push({
-          studentId: studentId,
-          lessonId: lessonId,
-          score: event.srcElement.options.selectedIndex,
-        });
-        localStorage.setItem('lessonScores', JSON.stringify(this.LessonScores));
-      }
-    }
+    this.selectService.processScore(event, studentId, lessonId);
   }
 
   getScore(studentId, lessonId) {
-    let score;
-    if (this.LessonScores.length == 0) return undefined;
-    this.LessonScores.forEach((lessonScore) => {
-      if (
-        lessonId == lessonScore.lessonId &&
-        studentId == lessonScore.studentId
-      )
-        score = lessonScore.score;
-      else score = undefined;
-    });
-    return score;
+    return this.getScoreService.getScore(studentId, lessonId);
   }
 
   getAvg(studentId) {
-    let sum = 0;
-    let count = 0;
-    if (this.LessonScores.length == 0) {
-      return '-';
-    }
-    this.LessonScores.forEach((lessonScore) => {
-      if (lessonScore.studentId == studentId) {
-        count++;
-        sum += lessonScore.score;
-      }
-    });
-    if (count == 0) {
-      return '-';
-    }
-    return (sum / count).toPrecision(3);
+    return this.getAvgService.getAvg(studentId);
   }
 
   getRoundedAvg(studentId) {
-    let sum = 0;
-    let count = 0;
-    if (this.LessonScores.length == 0) {
-      return '-';
-    }
-    this.LessonScores.forEach((lessonScore) => {
-      if (lessonScore.studentId == studentId) {
-        count++;
-        sum += lessonScore.score;
-      }
-    });
-    if (count == 0) {
-      return '-';
-    }
-    return Math.round(sum / count);
+    return this.getAvgService.getRoundedAvg(studentId);
   }
 
   getIndex(studentId, lessonId) {
-    let index;
-    if (this.LessonScores.length == 0) return 0;
-    this.LessonScores.forEach((lessonScore) => {
-      if (
-        lessonId == lessonScore.lessonId &&
-        studentId == lessonScore.studentId
-      ) {
-        index = lessonScore.score;
-      }
-    });
-    return index;
+    return this.getIndexService.getIndex(studentId, lessonId);
   }
 }
