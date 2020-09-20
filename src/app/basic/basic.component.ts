@@ -7,6 +7,7 @@ import { LessonService } from './lesson.service';
 @Component({
   selector: 'app-basic',
   templateUrl: './basic.component.html',
+  styleUrls: ['basicStyle.css'],
 })
 export class BasicComponent implements DoCheck {
   Lessons: Lesson[] = JSON.parse(localStorage.getItem('lessons'));

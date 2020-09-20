@@ -1,59 +1,70 @@
-<h3>Таблица уроков</h3>
-<table border="1" style="text-align: center">
-    <tr>
-        <th>Номер</th>
-        <th>Дата</th>
-        <th>Тема</th>
-        <th>Задание</th>
-        <th>Примечание</th>
-    </tr>
-    <ng-container *ngFor="let lesson of Lessons">
-        <tr>
-            <td>{{lesson.number}}</td>
-            <td>{{lesson.date}}</td>
-            <td>{{lesson.topic}}</td>
-            <td>{{lesson.homework}}</td>
-            <td>{{lesson.note}}</td>
+<div class="table-container">
+<h3 class="header">Уроки:</h3>
+</div>
+<div class="table-container">
+    <table>
+        <tr class="active-row">
+            <th>Номер</th>
+            <th>Дата</th>
+            <th>Тема</th>
+            <th>Задание</th>
+            <th>Примечание</th>
         </tr>
-    </ng-container>
-</table>
-
-<div style="margin: 1% 0% 3% 0%;">
-    <input type="text" placeholder="Номер" value="1" #nmbr>
-    <input type="text" placeholder="Дата" value="19.09.2020" #dt>
-    <input type="text" placeholder="Тема" value="Angular basic terms" #tpc>
-    <input type="text" placeholder="Задание" value="Remember ng commands" #hmwrk>
-    <input type="text" placeholder="Примечание" value="Try to use basic commands" #nt>
-    <button (click)="onClickAddLesson()">Добавить урок</button>
+        <ng-container *ngFor="let lesson of Lessons">
+            <tr>
+                <td>{{lesson.number}}</td>
+                <td>{{lesson.date}}</td>
+                <td>{{lesson.topic}}</td>
+                <td>{{lesson.homework}}</td>
+                <td>{{lesson.note}}</td>
+            </tr>
+        </ng-container>
+    </table>
 </div>
 
+<div class="table-container">
+    <div style="margin: 1% 0% 3% 0%;">
+        <input class="rounded-input" type="text" placeholder="Номер" #nmbr>
+        <input class="rounded-input" type="text" placeholder="Дата" #dt>
+        <input class="rounded-input" type="text" placeholder="Тема" #tpc>
+        <input class="rounded-input" type="text" placeholder="Задание" #hmwrk>
+        <input class="rounded-input" type="text" placeholder="Примечание" #nt>
+        <button class="rounded-input" (click)="onClickAddLesson()">Добавить урок</button>
+    </div>
+</div>
 
-<h3>Таблица оценок</h3>
-<table border="1" style="text-align: center">
-    <tr>
-        <th>ФИО</th>
-        <th>Средний балл</th>
-        <th>Округленный средний балл</th>
-        <th *ngFor="let lesson of Lessons">{{lesson.date.toString() + ', ' + lesson.topic}}</th>
-    </tr>
-    <tr *ngFor="let student of Students">
-        <td>{{student.name}}</td>
-        <td>{{ getAvg(student.id) }}</td>
-        <td>{{ getRoundedAvg(student.id) }}</td>
-        <td *ngFor="let lesson of Lessons">
-            <select (change)="onClickSelect($event, student.id, lesson.id)" [selectedIndex]="getIndex(student.id, lesson.id)">
-                <option>-</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </select>
-        </td>
-    </tr>
-</table>
-
-<div style="margin: 1% 0% 3% 0%;">
-    <input type="text" placeholder="Имя" #studentName>
-    <button (click)="onClickAddStudent()">Добавить студнета</button>
+<div class="table-container">
+    <h3 class="header">Оценки:</h3>
+</div>
+<div class="table-container">
+    <table>
+        <tr>
+            <th>ФИО</th>
+            <th>Средний балл</th>
+            <th>Округленный средний балл</th>
+            <th *ngFor="let lesson of Lessons">{{lesson.date.toString() + ', ' + lesson.topic}}</th>
+        </tr>
+        <tr *ngFor="let student of Students">
+            <td>{{student.name}}</td>
+            <td>{{ getAvg(student.id) }}</td>
+            <td>{{ getRoundedAvg(student.id) }}</td>
+            <td *ngFor="let lesson of Lessons">
+                <select (change)="onClickSelect($event, student.id, lesson.id)"
+                    [selectedIndex]="getIndex(student.id, lesson.id)">
+                    <option>-</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="table-container">
+    <div style="margin: 1% 0% 3% 0%;">
+        <input class="rounded-input" type="text" placeholder="Имя" #studentName>
+        <button class="rounded-input" (click)="onClickAddStudent()">Добавить студнета</button>
+    </div>
 </div>
