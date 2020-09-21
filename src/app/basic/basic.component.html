@@ -24,12 +24,17 @@
 
 <div class="table-container">
     <div style="margin: 1% 0% 3% 0%;">
-        <form [formGroup]="addLessonForm" novalidate>
+        <form [formGroup]="lessonFormGroup" novalidate>
             <input formControlName="lessonNumber" class="rounded-input" type="text" placeholder="Номер">
-            <input formControlName="lessonDate" class="rounded-input" type="text" placeholder="Дата">
+            <span *ngIf="lessonFormGroup.get('lessonNumber').invalid && lessonFormGroup.get('lessonNumber').touched">Укажите число</span>
+            <input formControlName="lessonDate" class="rounded-input" type="date" placeholder="Дата" min="{{someDate}}">
+            <span *ngIf="lessonFormGroup.get('lessonDate').invalid && lessonFormGroup.get('lessonDate').touched">Укажите дату</span>
             <input formControlName="lessonTopic" class="rounded-input" type="text" placeholder="Тема">
+            <span *ngIf="lessonFormGroup.get('lessonTopic').invalid && lessonFormGroup.get('lessonTopic').touched">Укажите тему</span>
             <input formControlName="lessonHomework" class="rounded-input" type="text" placeholder="Задание">
+            <span *ngIf="lessonFormGroup.get('lessonHomework').invalid && lessonFormGroup.get('lessonHomework').touched">Укажите задание</span>
             <input formControlName="lessonNote" class="rounded-input" type="text" placeholder="Примечание">
+            <span *ngIf="lessonFormGroup.get('lessonNote').invalid && lessonFormGroup.get('lessonNote').touched">Укажите примечание</span>
             <button class="rounded-input" (click)="onClickAddLesson()">Добавить урок</button>
         </form>
     </div>
@@ -66,8 +71,11 @@
 </div>
 <div class="table-container">
     <div style="margin: 1% 0% 3% 0%;">
-        <form [formGroup]="addStudentForm" novalidate>
-            <input formControlName="studentName" class="rounded-input" type="text" placeholder="Имя">
+        <form>
+            <input [formControl]="studentName" class="rounded-input" type="text" placeholder="Имя">
+            <div *ngIf="studentName.invalid && (studentName.touched || studentName.dirty)">
+                <span *ngIf="studentName.errors?.required">Field is required</span>
+            </div>
             <button class="rounded-input" (click)="onClickAddStudent()">Добавить студнета</button>
         </form>
     </div>

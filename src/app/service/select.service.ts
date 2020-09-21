@@ -7,45 +7,50 @@ import { LessonScore } from '../model/lessonScore';
 })
 export class SelectService {
 
-  LessonScores: LessonScore[] = JSON.parse(
+  lessonScores: LessonScore[] = JSON.parse(
     localStorage.getItem('lessonScores')
   );
 
   constructor() {
-    if (this.LessonScores == null) {
-      this.LessonScores = [];
+    if (this.lessonScores == null) {
+      this.lessonScores = [];
     }
   }
 
   // проверяем пустой ли список, если да - пушим,
   // если нет проверяем есть ли объект с таким студентИд и лессонИд, если да - присваиваем значение оценки, если нет - пушим
   processScore(event, studentId, lessonId) {
-    if (this.LessonScores.length == 0) {
-      this.LessonScores.push({
+    console.log('вызван processScore, ' + 'studentId = ' + studentId + ', lessonId = ' + lessonId + ', event.srcElement.options.selectedIndex = ' + event.srcElement.options.selectedIndex);
+    if (this.lessonScores.length == 0) {
+      this.lessonScores.push({
         studentId: studentId,
         lessonId: lessonId,
         score: event.srcElement.options.selectedIndex,
       });
-      localStorage.setItem('lessonScores', JSON.stringify(this.LessonScores));
+      localStorage.setItem('lessonScores', JSON.stringify(this.lessonScores));
     } else {
       let isFound = false;
-      this.LessonScores.forEach((lessonScore) => {
+      this.lessonScores.forEach((lessonScore) => {
         if (
           lessonId == lessonScore.lessonId &&
           studentId == lessonScore.studentId
         ) {
+          console.log('ставим оценку');
           lessonScore.score = event.srcElement.options.selectedIndex;
+          console.log(lessonScore);
           isFound = true;
         }
       });
       if (!isFound) {
-        this.LessonScores.push({
+        this.lessonScores.push({
           studentId: studentId,
           lessonId: lessonId,
           score: event.srcElement.options.selectedIndex,
         });
-        localStorage.setItem('lessonScores', JSON.stringify(this.LessonScores));
+
       }
+      localStorage.clear;
+      localStorage.setItem('lessonScores', JSON.stringify(this.lessonScores));
     }
   }
 }

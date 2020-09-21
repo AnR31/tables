@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Lesson } from '../model/lesson';
 import { Student } from '../model/student';
@@ -7,28 +7,31 @@ import { SelectService } from '../service/select.service';
 import { GetAvgService } from '../service/get-avg.service';
 import { GetIndexService } from '../service/get-index.service';
 import { GetScoreService } from '../service/get-score.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-basic',
   templateUrl: './basic.component.html',
-  styleUrls: ['basicStyle.css'],
+  styleUrls: ['basic-style.css'],
 })
 export class BasicComponent {
-
   Lessons: Lesson[] = JSON.parse(localStorage.getItem('lessons'));
   Students: Student[] = JSON.parse(localStorage.getItem('students'));
   LessonScores: LessonScore[] = JSON.parse(
     localStorage.getItem('lessonScores')
   );
-
+  someDate = new Date().toISOString().split('T')[0];
   studentId: number = 0;
   lessonId: number = 0;
   selIndex: number = 0;
 
-  @ViewChild('studentName') studentName;
+  studentName: FormControl = new FormControl(null, [Validators.required]);
 
-  addLessonForm: FormGroup;
+  lessonFormGroup: FormGroup;
 
   addStudentForm: FormGroup;
 
@@ -38,7 +41,19 @@ export class BasicComponent {
     private getIndexService: GetIndexService,
     private getScoreService: GetScoreService
   ) {
-    this._createForm();
+    this.lessonFormGroup = new FormGroup({
+      lessonNumber: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('[1-9]*'),
+      ]),
+      lessonDate: new FormControl(null, [Validators.required]),
+      lessonTopic: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('[a-zA-Zа-яА-Я]*'),
+      ]),
+      lessonHomework: new FormControl(null, [Validators.required]),
+      lessonNote: new FormControl(null),
+    });
     if (this.LessonScores == null) {
       this.LessonScores = [];
     }
@@ -48,40 +63,36 @@ export class BasicComponent {
     if (this.Lessons == null) {
       this.Lessons = [];
     }
-  }
-
-  private _createForm() {
-    this.addLessonForm = new FormGroup({
-      lessonNumber: new FormControl(null),
-      lessonDate: new FormControl(null),
-      lessonTopic: new FormControl(null),
-      lessonHomework: new FormControl(null),
-      lessonNote: new FormControl(null),
-    }),
-    this.addStudentForm = new FormGroup({
-      studentName: new FormControl(null),
-    })
+    if (this.Students === undefined) {
+      this.Students = [];
+    }
   }
 
   onClickAddLesson() {
-    this.Lessons.push({
-      id: this.lessonId++,
-      number: this.addLessonForm.get('lessonNumber').value,
-      date: this.addLessonForm.get('lessonDate').value,
-      topic: this.addLessonForm.get('lessonTopic').value,
-      homework: this.addLessonForm.get('lessonHomework').value,
-      note: this.addLessonForm.get('lessonNote').value,
-    });
-    localStorage.setItem('lessons', JSON.stringify(this.Lessons));
+    if (this.lessonFormGroup.invalid) alert('Пожалуйста, будте внимательны при заполнении полей, их нужно заполнить правильно, иначе не получится добавить урок. Спасибо.');
+    else {
+      this.Lessons.push({
+        id: this.lessonId++,
+        number: this.lessonFormGroup.get('lessonNumber').value,
+        date: this.lessonFormGroup.get('lessonDate').value,
+        topic: this.lessonFormGroup.get('lessonTopic').value,
+        homework: this.lessonFormGroup.get('lessonHomework').value,
+        note: this.lessonFormGroup.get('lessonNote').value,
+      });
+      localStorage.setItem('lessons', JSON.stringify(this.Lessons));
+    }
   }
 
   onClickAddStudent() {
+
+    if (this.studentName.invalid) alert('надо заполнять все правильно');
+    else {
     this.Students.push({
       id: this.studentId++,
-      name: this.addStudentForm.get('studentName').value,
+      name: this.studentName.value,
     });
     localStorage.setItem('students', JSON.stringify(this.Students));
-  }
+  } }
 
   onClickSelect(event, studentId, lessonId) {
     this.selectService.processScore(event, studentId, lessonId);
@@ -92,6 +103,7 @@ export class BasicComponent {
   }
 
   getAvg(studentId) {
+    console.log('this.getAvgService.getAvg(studentId) = ' + this.getAvgService.getAvg(studentId));
     return this.getAvgService.getAvg(studentId);
   }
 
@@ -101,5 +113,6 @@ export class BasicComponent {
 
   getIndex(studentId, lessonId) {
     return this.getIndexService.getIndex(studentId, lessonId);
-  }
+  } 
+
 }
